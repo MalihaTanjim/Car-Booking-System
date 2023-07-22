@@ -1,0 +1,128 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Car {
+public:
+    string type;
+    vector<string> models;
+    int perHourCost;
+
+    Car(string type, const vector<string>& models, int perHourCost)
+        : type(type), models(models), perHourCost(perHourCost) {}
+
+    void displayModels() {
+        cout << "\nAvailable " << type << " Models:\n";
+        for (size_t i = 0; i < models.size(); i++) {
+            cout << i + 1 << ". " << models[i] << endl;
+        }
+    }
+
+    int calculateBill(int hours) const {
+        return perHourCost * hours;
+    }
+};
+
+class PrivateCar : public Car {
+public:
+    PrivateCar()
+        : Car("Private Car", { "Model: Toyota Corolla", "Model : Honda Civic", "Model : Toyota Corolla Axio" }, 700) {}
+};
+
+class Microbus : public Car {
+public:
+    Microbus()
+        : Car("Microbus", { "Model: Toyota Noah", "Model: Toyota Hiace", "Model: Nissan Urvan" }, 1050) {}
+};
+
+class Jeep : public Car {
+public:
+    Jeep()
+        : Car("Jeep", { "Model: Toyota Prado", "Model: Toyota Land Cruiser", "Model: Mitsubishi Pajero" }, 1800) {}
+};
+
+class Bus : public Car {
+public:
+    Bus()
+        : Car("Bus", { "Model: Nissan Civilian", "Model: Toyota Coaster", "Model: Mitsubishi Fuso Aero" }, 2750) {}
+};
+
+int main() {
+    cout << "*****Welcome to the Car Booking System!*****\n";
+    cout << "     ---------------------------------\n";
+    cout << "-------------------------------------------\n";
+
+    PrivateCar privateCar;
+    Microbus microbus;
+    Jeep jeep;
+    Bus bus;
+
+    int vehicleType, modelChoice, hours;
+
+    while (true) {
+        cout << "\nSelect a Vehicle Type:\n";
+        cout << "1. Private Car(700 TAKA per Hour)\n";
+        cout << "2. Microbus(1050 TAKA per Hour)\n";
+        cout << "3. Jeep(1800 TAKA per Hour)\n";
+        cout << "4. Bus(2750 TAKA per Hour)\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+
+        cin >> vehicleType;
+
+        if (vehicleType == 5) {
+            cout << "\nThank you for using the Car Booking System. Goodbye!\n";
+            break;
+        }
+
+        Car* selectedCar;
+
+        switch (vehicleType) {
+            case 1:
+                selectedCar = &privateCar;
+                break;
+            case 2:
+                selectedCar = &microbus;
+                break;
+            case 3:
+                selectedCar = &jeep;
+                break;
+            case 4:
+                selectedCar = &bus;
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+                continue;
+        }
+
+        selectedCar->displayModels();
+
+        cout << "Select a Model (1, 2, or 3): ";
+        cin >> modelChoice;
+
+        if (modelChoice < 1 || modelChoice > 3) {
+            cout << "Invalid choice. Please try again.\n";
+            continue;
+        }
+
+        modelChoice--; // Adjust index for vector
+
+        cout << "Enter the number of hours you want to book: ";
+        cin >> hours;
+
+        int totalBill = selectedCar->calculateBill(hours);
+
+        cout << "\nBooking Confirmation:\n";
+        cout << "----------------------\n";
+        cout << "Vehicle Type: " << selectedCar->type << endl;
+        cout << "Model: " << selectedCar->models[modelChoice] << endl;
+        cout << "Hours Booked: " << hours << endl;
+        cout << "Per Hour Cost: " << selectedCar->perHourCost << "/= TAKA\n";
+        cout << "Total Bill: " << totalBill << "/= TAKA\n";
+        cout << "\nThank you for using the Car Booking System. Goodbye!\n";
+    }
+
+    return 0;
+}
